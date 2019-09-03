@@ -45,10 +45,48 @@ getJasmineRequireObj().toHaveBeenCalledWith = function(j$) {
               return '  ' + j$.pp(argsForCall);
             });
 
-            return 'Expected spy ' + actual.and.identity + ' to have been called with:\n' +
-              '  ' + j$.pp(expectedArgs) + '\n' + '' +
-              'but actual calls were:\n' +
-              prettyPrintedCalls.join(',\n') + '.';
+            // var i;
+            //
+            // for (i = 0; i < Math.max(actualArgs.length, expectedArgs.length); i++) {
+            //   diffBuilder.withPath(i, function() {
+            //     diffBuilder.record(actualArgs[i], expectedArgs[i]);
+            //   });
+            // }
+            //
+            // return diffBuilder.getMessage();
+
+            // return actual.calls.allArgs().map(function(argsForCall) {
+            //   var diffBuilder = j$.DiffBuilder();
+            //   diffBuilder.record(argsForCall, expectedArgs);
+            //   return '*' + diffBuilder.getMessage();
+            // }).join('\n');
+
+            debugger;
+            if (actual.calls.count() === 1) {
+              return 'Expected spy ' + actual.and.identity + ' to have been called with:\n' +
+                '  ' + j$.pp(expectedArgs) + '\n' + '' +
+                'but the actual call was:\n' +
+                prettyPrintedCalls[0] + '.';
+            } else {
+              var prefix = 'Expected spy ' + actual.and.identity + ' to have been called with:\n' +
+                '  ' + j$.pp(expectedArgs) + '\n' + '' +
+                'but actual calls were:\n' +
+                prettyPrintedCalls.join(',\n') + '.';
+
+              var actualArgs = actual.calls.argsFor(0);
+              // var diffBuilder = j$.DiffBuilder();
+              // util.equals(actualArgs, expectedArgs, customEqualityTesters, diffBuilder);
+
+              // return prefix + '\n\nArgument difference: ' + diffBuilder.getMessage();
+
+              return prefix + '\n\n' + actual.calls.allArgs().map(function(argsForCall, callIx) {
+                for (var i = 0; i < Math.max(actualArgs.length, expectedArgs.length); i++) {
+                  var diffBuilder = j$.DiffBuilder();
+                  util.equals(argsForCall, expectedArgs, customEqualityTesters, diffBuilder);
+                }
+                return 'Call ' + callIx + ': ' + diffBuilder.getMessage();
+              }).join('\n');
+            }
           };
         }
 

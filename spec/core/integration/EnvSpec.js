@@ -3,6 +3,47 @@ describe("Env integration", function() {
     jasmine.getEnv().registerIntegrationMatchers();
   });
 
+  fit('does a thing', function () {
+    const foo = jasmine.createSpy('foo');
+    // foo(1, [2, 3], {bar: 4});
+    // foo(1, [2, 3]);
+    // expect(foo).toHaveBeenCalledWith(1, [2, 3], {bar: 5});
+    foo({
+      subject: ['serviceu', 'more-serviceu'],
+      profile: ['human', 'annoying', 'notsogood'],
+      type: ['shyan-the-cat', 'lovely', 'beautiful', 'hero']
+    });
+    expect(foo).toHaveBeenCalledWith({
+      subject: [ 'serviceu', 'more-serviceu' ],
+      type: [ 'shyan-the-cat', 'lovely', 'beautfiul', 'hero' ],
+      profile: [ 'human', 'annoying', 'notsogood' ],
+    });
+
+  });
+
+  fit('does another thing', function () {
+    const foo = jasmine.createSpy('foo');
+    // foo(1, [2, 3], {bar: 4});
+    // foo(1, [2, 3]);
+    // expect(foo).toHaveBeenCalledWith(1, [2, 3], {bar: 5});
+    foo({
+      subject: ['serviceu', 'more-serviceu'],
+      profile: ['human', 'annoying', 'notsogood'],
+      type: ['shyan-the-cat', 'lovely', 'beautiful', 'hero']
+    });
+    foo({
+      subject: [ 'serviceu', 'more-serviceu' ],
+      profile: [ 'human', 'annoying', 'notsogood' ],
+      type: [ 'shyan-the-dog', 'lovely', 'beautfiul', 'hero' ],
+    });
+    expect(foo).toHaveBeenCalledWith({
+      subject: [ 'serviceu', 'more-serviceu' ],
+      type: [ 'shyan-the-cat', 'lovely', 'beautfiul', 'hero' ],
+      profile: [ 'human', 'annoying', 'notsogood' ],
+    });
+
+  });
+
   it("Suites execute as expected (no nesting)", function(done) {
     var env = new jasmineUnderTest.Env(),
         calls = [];
